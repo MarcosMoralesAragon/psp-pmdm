@@ -1,4 +1,4 @@
-package ejercicios
+package ejercicios_01
 
 fun main() {
     val rango: IntProgression = 11..50 step 2

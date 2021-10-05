@@ -1,4 +1,4 @@
-package ejercicios
+package ejercicios_01
 
 fun main() {
     val h = 12.3;

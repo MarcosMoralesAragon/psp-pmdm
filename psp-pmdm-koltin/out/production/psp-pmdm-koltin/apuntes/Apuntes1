@@ -1,0 +1,81 @@
+En Kotlin todo son objetos.
+
+FUNCIONES CON PARÁMETROS
+
+Cuando hacemos una función - fun foo(a:String, b:Boolean = false, c:String) y le metemos parámetros es
+obligatorio poner las variables no predefinidas -
+- foo("hola mundo") --> esto está mal, ya que tiene que haber otro String, no se pone null como predeterminado
+- foo("hola mundo", true, "Adios") --> Correcto
+- foo("hola", "adios") --> Esto es incorrecto porque está pasando como segundo parámetro una cadena cuando es un boolean
+Si queremos pasar por parámetros solo los String sin tener que poner el booleano predeterminado ser haría
+de la siguiente manera:
+- foo("Hola", c = "Adios")
+
+
+FUNCIONES ANÓNIMAS
+
+Las funciones anónimas son funciones sin nombres:
+val rango:IntRange = 1..20
+rango.filter(
+fun(num):Bollean{
+return(num % 2 == 0)
+}
+)
+No pueden ser genéricas
+* No pueden tener argumentos opcionales
+* Se puede omitir el tipo de los parámetros y retorno si se pueden inferir por el contexto
+Nos permiten el acceso a variables no locales dentro de la función contenedora. Se implementa usando clisures o cerraduras
+Es una expresión por lo que se puede guardar dentro de una variable para luego poder usarla
+
+FUNCIONES LAMBDA
+
+Teniendo esta función anónima:
+fun(a:Int, b:Int){return a*b}
+Usando lambda sería:
+{a:Int, b:Int -> a*b}
+Usando el ejemplo anterior implementando lambda:
+val rango:IntRange = 1..20
+rango.filter(
+{num:Int -> num % 2 == 0}
+)
+
+La estructura de la lambda es: {a:tipo, b:tipo -> operación} (se incluyen las llaves)
+Una lambda es una expresión, por lo que se puede guardar dentro de una variable para usarla dsp
+Si usamos la lambda en métodos y esta ser la última podemos ponerla fuera de los paréntesis o dentro, ejemplo:
+- rango.filter(){num:Int -> num % 2 == 0} -- Este método puede tener varios parámetros: rango.filter(x, y){num:Int -> num % 2 == 0}
+- rango.filter({num:Int -> num % 2 == 0})
+- rango.filter{num:Int -> num % 2 == 0} (se obvia los paréntesis del método)
+- rango.filter{it % 2 == 0} -- esto se usará cuando la lambda solo tendrá un parámetro, se puede usar la palabra reservada it
+
+Una función que no devuelve nada se hace con: fun foo(...):Unit - comparable con el Void en Java
+
+FUNCIONES DE ORDEN SUPERIOR
+
+Son aquellas que toma como parámetro a otra función o la devuelve como resultado:
+una función como parámetro.
+fun recibir(funcion:(String) -> Int){
+funcion()
+}
+
+devuelve una función.
+fun retornar(): () -> Unit{
+return{println("Función de orden superior")}
+}
+
+Usando la palabra inline obliga al compilador a sustituir la lambda por su código:
+inline fun too(num:Int, crossinline par:() -> Unit, crossinline impar: ()){
+if(num % 2 == 0) par() else impar()
+}
+
+La palabra crossinline es usado en las funciones que son unadas como parámetros dentro de una función inline
+
+var num:Int = 0
+var rango:IntRange = 1..5
+iterarLambda(rango, {num += it})
+
+inline fun iterarLambda(datos:IntRange, crossinline foo: (num:Int) -> Unit){
+datos.map({println(Número $it) //aquí el map hace de buble sobre el rango, por ejemplo el rango es 5 pues irá del 1 al 5.
+foo(it) // aqui se mete los valores que en el anterior buble se ha introducido y no devuelve nada porque lo hemos puesto Unit
+})
+}
+dentro de num estaría la suma de los 5 números de foo.
