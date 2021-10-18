@@ -7,14 +7,15 @@ fun detectorDeTipo( a: Any): String {
 }
 fun <T> separadorDeArrays(array: Array<T>, boolean: Boolean = false): String{
     var cadena = ""
-    if(boolean == false){
+    if(!boolean){
         array.forEachIndexed{index, item ->
             if(index != 0){
                 cadena += ", $item"
             } else{
                 cadena += "$item"
-            }}
-    } else if (boolean == true){
+            }
+        }
+    } else if (boolean){
         array.forEachIndexed{index, item ->
             cadena += "\n\n$item"}
     }
@@ -23,37 +24,31 @@ fun <T> separadorDeArrays(array: Array<T>, boolean: Boolean = false): String{
 
 fun <T> separadorDeArraysParaEj4(array: Array<T>, boolean: Boolean = false): String{
     var cadena = ""
-    if(boolean == false){
+
+    array.forEachIndexed { index, item -> }
+
+    if(!boolean){
         array.forEachIndexed{index, item ->
             if(index != 0){
                 cadena += "\t $item"
             } else{
                 cadena += "$item"
-            }}
-    } else if (boolean == true){
+            }
+        }
+    } else if (boolean){
         array.forEachIndexed{index, item ->
             cadena += "\n\n\n$item"}
     }
     return cadena
 }
 fun sonCircularmenteIguales(array1: Array<Int>, array2: Array<Int>):Boolean{
-    var esCircular = false;
-    var coinciden = 0;
-    var contadorPrimerArray = 0;
-    var contadorSegundoArray = 0;
+    var i = 0;
+    var j = array2.lastIndexOf(array1[0]);
 
-    while(contadorPrimerArray < array1.size){
-        contadorSegundoArray = contadorPrimerArray + 1;
-        if (contadorSegundoArray == array2.size){
-            contadorSegundoArray = 0;
-        }
-        if(array1[contadorPrimerArray] == array2[contadorSegundoArray]){
-            coinciden++;
-        }
-        contadorPrimerArray++;
+    while ((i < array1.size) && (array1[i] == array2[j])){
+        j = (j+1)%array2.size;
+        i++;
     }
-    if (coinciden == array1.size){
-        esCircular = true
-    }
-    return esCircular
+
+    return i == array1.size
 }
